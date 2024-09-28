@@ -1,0 +1,227 @@
+//Daalgavar1
+import java.io.*;
+public class Main {
+    public static void main(String[] args) {
+        try {
+            String[] fileNames = {"f1", "f2", "f3", "f4", "f5"};
+            String helperFileName = "h";
+            byte[] buffer = new byte[1024];
+            for (int i = 0; i < fileNames.length; i++) {
+                String sourceFileName = fileNames[i];
+                //file neriig 2 oor ahiulna.
+                String targetFileName = fileNames[(i + 2) % fileNames.length];
+                FileInputStream sourceFile = new FileInputStream(sourceFileName);
+                FileOutputStream targetFile = new FileOutputStream(targetFileName);
+                int bytesRead;
+                while ((bytesRead = sourceFile.read(buffer)) != -1) {
+                    targetFile.write(buffer, 0, bytesRead);
+                }
+                sourceFile.close();
+                targetFile.close();
+            }
+            File helperFile = new File(helperFileName);
+            if (helperFile.exists()) {
+                helperFile.delete();
+            }
+            System.out.println("Амжилттай хуулсан.");
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+}
+//Daalgavar2
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+class Point {
+    int x;
+    int y;
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+public class ShapeConstruction {
+    public static void main(String[] args) {
+        try {
+            List<Point> points = readDataFromFile("data.txt");
+            List<Line> segments = constructSegments(points);
+            List<Rectangle> rectangles = constructRectangles(points);
+            List<Shape> shapes = constructShapesWithAB(points);
+            for (Line segment : segments) {
+                System.out.println("Хэрчим : " + segment);
+            }
+            for (Rectangle rectangle : rectangles) {
+                System.out.println("Тэгш өнцөгтүүд : " + rectangle);
+            }
+            for (Shape shape : shapes) {
+                System.out.println("АВ хэлбрийн дүрс : " + shape);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private static List<Point> readDataFromFile(String fileName) throws IOException {
+        List<Point> points = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\s+");
+                if (parts.length >= 2) {
+                    int x = Integer.parseInt(parts[0]);
+                    int y = Integer.parseInt(parts[1]);
+                    points.add(new Point(x, y));
+                }
+            }
+        }
+        return points;
+    }
+    private static List<Line> constructSegments(List<Point> points) {
+        List<Line> segments = new ArrayList<>();
+        for (int i = 0; i < points.size(); i += 2) {
+            Point startPoint = points.get(i);
+            Point endPoint = points.get(i + 1);
+            segments.add(new Line(startPoint, endPoint));
+        }
+        return segments;
+    }
+    private static List<Rectangle> constructRectangles(List<Point> points) {
+        List<Rectangle> rectangles = new ArrayList<>();
+        for (int i = 0; i < points.size(); i += 4) {
+            Point topLeft = points.get(i);
+            Point bottomRight = points.get(i + 2);
+            rectangles.add(new Rectangle(topLeft, bottomRight));
+        }
+        return rectangles;
+    }
+
+    private static List<Shape> constructShapesWithAB(List<Point> points) {
+        List<Shape> shapes = new ArrayList<>();
+        for (int i = 0; i < points.size(); i += 4) {
+            if (i + 3 < points.size()) {
+                Point a = points.get(i);
+                Point b = points.get(i + 1);
+                Point c = points.get(i + 2);
+                Point d = points.get(i + 3);
+                shapes.add(new Shape(a, b, c, d));
+            }
+        }
+        return shapes;
+    }
+}
+
+class Line {
+    Point start;
+    Point end;
+
+    public Line(Point start, Point end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    @Override
+    public String toString() {
+        return " (" + start.x + "," + start.y + ") to (" + end.x + "," + end.y + ")";
+    }
+}
+
+class Rectangle {
+    Point topLeft;
+    Point bottomRight;
+
+    public Rectangle(Point topLeft, Point bottomRight) {
+        this.topLeft = topLeft;
+        this.bottomRight = bottomRight;
+    }
+
+    @Override
+    public String toString() {
+        return " Зүүн дээд = (" + topLeft.x + "," + topLeft.y + "), Баруун доод = (" + bottomRight.x + "," + bottomRight.y + ")";
+    }
+}
+
+class Shape {
+    Point a;
+    Point b;
+    Point c;
+    Point d;
+
+    public Shape(Point a, Point b, Point c, Point d) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+    }
+
+    @Override
+    public String toString() {
+        return " A=(" + a.x + "," + a.y + "), B=(" + b.x + "," + b.y + "), C=(" + c.x + "," + c.y + "), D=(" + d.x + "," + d.y + ")";
+    }
+}
+//Daalgavar3
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+class Die {
+    double cubeSize;
+    String color;
+    String material;
+    public Die(double cubeSize, String color, String material) {
+        this.cubeSize = cubeSize;
+        this.color = color;
+        this.material = material;
+    }
+    @Override
+    public String toString() {
+        return cubeSize + " " + color + " " + material;
+    }
+}
+public class DiceAnalysis {
+    public static void main(String[] args) {
+        List<Die> dice = new ArrayList<>();
+        dice.add(new Die(1.0, "red", "wood"));
+        dice.add(new Die(2.0, "blue", "metal"));
+        dice.add(new Die(1.0, "red", "wood"));
+        dice.add(new Die(1.5, "green", "cardboard"));
+        dice.add(new Die(1.0, "yellow", "wood"));
+        try (PrintWriter writer = new PrintWriter(new File("data.dat"))) {
+            for (Die die : dice) {
+                writer.println(die);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<Die> loadedDice = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("data.dat"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(" ");
+                if (parts.length == 3) {
+                    double cubeSize = Double.parseDouble(parts[0]);
+                    String color = parts[1];
+                    String material = parts[2];
+                    loadedDice.add(new Die(cubeSize, color, material));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Map<String, Integer> colorCounts = new HashMap<>();
+        int woodenCubesWithEdgeM = 0;
+        String mostFrequentColor = "";
+        for (Die die : loadedDice) {
+            colorCounts.put(die.color, colorCounts.getOrDefault(die.color, 0) + 1);
+            if (die.material.equals("wood") && die.cubeSize == 1.0) {
+                woodenCubesWithEdgeM++;
+            }
+            if (colorCounts.get(die.color) > colorCounts.getOrDefault(mostFrequentColor, 0)) {
+                mostFrequentColor = die.color;
+            }
+        }
+        System.out.println("Өнгө тус бүрийн шоо : " + colorCounts);
+        System.out.println("1.0 урттай модон шоо : " + woodenCubesWithEdgeM);
+        System.out.println("Хамгийн их байгаа өнгө : " + mostFrequentColor);
+    }
+}

@@ -1,0 +1,64 @@
+import java.io.*;
+public class Main {
+
+    public static void main(String[] args) {
+        try {
+            DataInputStream fInput = new DataInputStream(new FileInputStream("input.dat"));
+            DataOutputStream gOutput = new DataOutputStream(new FileOutputStream("output.dat"));
+            int num;
+            boolean temdeg = true;
+            while (true) {
+                try {
+                    num = fInput.readInt();
+                    if (temdeg) {
+                        gOutput.writeInt(Math.abs(num));
+                    } else {
+                        gOutput.writeInt(-Math.abs(num));
+                    }
+                    temdeg = !temdeg;
+                } catch (EOFException e) {
+                    break;
+                }
+            }
+            fInput.close();
+            gOutput.close();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+}
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+public class Main{
+    public static void main(String[] args) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("input.dat"));
+            List<Integer> positiveNumbers = new ArrayList<>();
+            List<Integer> negativeNumbers = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                int number = Integer.parseInt(line);
+                if (number >= 0) {
+                    positiveNumbers.add(number);
+                } else {
+                    negativeNumbers.add(number);
+                }
+            }
+            BufferedWriter writerG = new BufferedWriter(new FileWriter("output.dat"));
+            for (int positiveNumber : positiveNumbers) {
+                writerG.write(Integer.toString(positiveNumber));
+                writerG.newLine();
+            }
+            for (int negativeNumber : negativeNumbers) {
+                writerG.write(Integer.toString(negativeNumber));
+                writerG.newLine();
+            }
+            writerG.close();
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

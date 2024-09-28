@@ -1,0 +1,209 @@
+//Daalgavar1
+import java.util.ArrayList;
+import java.util.List;
+
+public class BasketballPlayer {
+    private String lastName;
+    private String firstName;
+    private char gender;
+    private int height;
+    private double weight;
+    private String dateOfBirth;
+    private String teamName;
+    private int playerNumber;
+    private int totalScores;
+    private int totalGamesPlayed;
+
+    public BasketballPlayer(String lastName, String firstName, char gender, int height, double weight,
+                            String dateOfBirth, String teamName, int playerNumber) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.gender = gender;
+        this.height = height;
+        this.weight = weight;
+        this.dateOfBirth = dateOfBirth;
+        this.teamName = teamName;
+        this.playerNumber = playerNumber;
+        this.totalScores = 0;
+        this.totalGamesPlayed = 0;
+    }
+
+    public void addScores(int scores) {
+        totalScores += scores;
+        totalGamesPlayed++;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public int getTotalScores() {
+        return totalScores;
+    }
+
+    public int getTotalGamesPlayed() {
+        return totalGamesPlayed;
+    }
+}
+
+class BasketballTeam {
+    public static void main(String[] args) {
+        List<BasketballPlayer> players = new ArrayList<>();
+
+        // Create at least 10 basketball players and add them to the team
+        players.add(new BasketballPlayer("Галаа", "Бат", 'M', 190, 85.5, "1995-05-15", "Team A", 1));
+        players.add(new BasketballPlayer("Буянаа", "Дорж", 'F', 175, 70.2, "1998-03-20", "Team A", 2));
+        players.add(new BasketballPlayer("Энхманлай", "Даваадорж", 'M', 200, 92.0, "1992-09-10", "Team A", 3));
+        players.add(new BasketballPlayer("Ирээдүй", "Болд", 'F', 180, 68.3, "1997-11-25", "Team A", 4));
+        players.add(new BasketballPlayer("Хулан", "Энхээ", 'M', 185, 78.1, "1994-02-08", "Team A", 5));
+        players.add(new BasketballPlayer("Номин", "Амар", 'F', 172, 64.7, "1993-07-30", "Team A", 6));
+        players.add(new BasketballPlayer("Энхжин", "Төрөө", 'M', 194, 88.9, "1991-12-05", "Team A", 7));
+        players.add(new BasketballPlayer("Онон", "Баяраа", 'F', 176, 71.6, "1996-06-12", "Team A", 8));
+        players.add(new BasketballPlayer("Орхон", "Баянаа", 'M', 198, 91.4, "1990-04-18", "Team A", 9));
+        players.add(new BasketballPlayer("Тулгаа", "Бямба", 'F', 170, 65.8, "1989-08-23", "Team A", 10));
+
+        // Add scores for each player
+        players.get(0).addScores(20);
+        players.get(1).addScores(18);
+        players.get(2).addScores(160);
+        players.get(3).addScores(140);
+        players.get(4).addScores(22);
+        players.get(5).addScores(170);
+        players.get(6).addScores(25);
+        players.get(7).addScores(19);
+        players.get(8).addScores(21);
+        players.get(9).addScores(150);
+
+        // Print information of players who scored more than 150 points
+        System.out.println("150-аас их оноо авсан тоглогчид :");
+        for (BasketballPlayer player : players) {
+            if (player.getTotalScores() > 150) {
+                System.out.println(player.getFullName() + " - Баг: " + player.getTeamName() + " - Оноо: " + player.getTotalScores());
+            }
+        }
+
+        // Find the youngest and oldest players on the team
+        BasketballPlayer youngestPlayer = players.get(0);
+        BasketballPlayer oldestPlayer = players.get(0);
+
+        for (BasketballPlayer player : players) {
+            if (player.getDateOfBirth().compareTo(youngestPlayer.getDateOfBirth()) > 0) {
+                youngestPlayer = player;
+            }
+            if (player.getDateOfBirth().compareTo(oldestPlayer.getDateOfBirth()) < 0) {
+                oldestPlayer = player;
+            }
+        }
+
+        System.out.println("Залуу тоглогч: " + youngestPlayer.getFullName() + " - Төрсөн огноо: " + youngestPlayer.getDateOfBirth());
+        System.out.println("Ахмад тоглогч: " + oldestPlayer.getFullName() + " - Төрсөн огноо: " + oldestPlayer.getDateOfBirth());
+    }
+}
+
+//Daalgavar2
+import java.io.*;
+import java.util.Scanner;
+import java.util.regex.*;
+
+public class hw2 {
+    public static void main(String[] args) {
+        Pattern datePattern = Pattern.compile("(\\d{1,2}/\\d{1,2}/\\d{4})");
+
+        try (
+                Scanner scanner = new Scanner(new File("input.txt"));
+                PrintWriter writer = new PrintWriter(new FileWriter("output.txt"))
+        ) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                Matcher matcher = datePattern.matcher(line);
+
+                while (matcher.find()) {
+                    String date = matcher.group(1);
+                    String[] parts = date.split("/");
+                    int month = Integer.parseInt(parts[1]);
+                    if (month >= 3 && month <= 5) {
+                        writer.println(date);
+                    }
+                }
+            }
+            System.out.println("Хаврын саруудтай огноог output.txt файлд оруулсан.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+//Daalgavar3
+import java.io.*;
+public class hw2{
+    public static void main(String[] args) {
+        try {
+            int[][] matrix = readMatrix("input1.txt");
+            if (sumMainDiagonal(matrix) == 5) {
+                appendMatrixToFile(matrix, "input2.txt");
+                System.out.println("диагональ нийлбэр нь 5тай тэнцүү Matrix-ийг input2.txt файлд нэмлээ.");
+            }
+        } catch (IOException e) {
+        }
+    }
+    private static int[][] readMatrix(String filename) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            int numRows = Integer.parseInt(br.readLine());
+            int numCols = Integer.parseInt(br.readLine());
+            int[][] matrix = new int[numRows][numCols];
+            for (int i = 0; i < numRows; i++) {
+                line = br.readLine();
+                String[] values = line.split("\\s+");
+                for (int j = 0; j < numCols; j++) {
+                    matrix[i][j] = Integer.parseInt(values[j]);
+                }
+            }
+            return matrix;
+        }
+    }
+    private static int sumMainDiagonal(int[][] matrix) {
+        int sum = 0;
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+        int minDim = Math.min(numRows, numCols);
+        for (int i = 0; i < minDim; i++) {
+            sum += matrix[i][i];
+        }
+        return sum;
+    }
+    private static void appendMatrixToFile(int[][] matrix, String filename) throws IOException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true))) {
+            int numRows = matrix.length;
+            int numCols = matrix[0].length;
+            bw.write(numRows + "\n");
+            bw.write(numCols + "\n");
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numCols; j++) {
+                    bw.write(matrix[i][j] + " ");
+                }
+                bw.write("\n");
+            }
+        }
+    }
+}
+

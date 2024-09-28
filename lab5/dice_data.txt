@@ -1,0 +1,5 @@
+1.0 red wood
+2.0 blue metal
+1.0 red wood
+1.5 green cardboard
+1.0 yellow wood
